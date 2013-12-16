@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="Generator" content="EditPlus®">
+        <meta name="Author" content="">
+        <meta name="Keywords" content="">
+        <meta name="Description" content="">
+        <title>Caption Parser</title>
+        <script src="./socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:9999');
+            // var dgebid = document.getElementById;
+            socket.on('news', function (data) {
+                console.log(data);
+                socket.emit('my other event', { my: 'data' });
+            });
+            var formatCaption = function() {
+                // var fromCode = document.getElementById("from");
+                var fromCode = document.getElementById("from").value;
+                socket.emit("startformat", { code: fromCode});
+            }
+            socket.on('formatCompleted', function (data) {
+                console.log("formatCompleted called!");
+                var toCode = document.getElementById("to");
+                toCode.value = data.outputCode;
+            });
+        </script>
+    </head>
+    <body>
+        <div width="1035px" height="100px">
+            <div id="fromDiv" width="1035px">
+                <textarea id="from"></textarea><br>
+                <input type="button" value="FORMAT" onclick="formatCaption();">
+            </div>
+            <div id="toDiv" width="100%">
+                <textarea id="to"></textarea>
+            </div>
+        </div>
+    </body>
+</html>

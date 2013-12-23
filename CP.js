@@ -26,9 +26,9 @@ var generateFormatLine = function(element, fmt) {
 var generateFormatBlock = function (block, fmt) {
     var output = "";
     var i = 0;
-    console.log(block);
+    // console.log(block);
     if (fmt == undefined) {
-        fmt = "{0}( {1},\t\t\t{2},\t\t\t{3},\t\t\t{4},\t\t\t{5},\t\t\t{6},\t\t{7},\t\t{8},\t\t{9},\t\t{10}),";
+        fmt = "{0}( {1},\t\t\t{2},\t\t{3},\t\t\t{4},\t{5},\t{6},\t{7},\t{8},\t{9},\t{10}),";
     };
     while (i < block.length)
     {
@@ -37,7 +37,7 @@ var generateFormatBlock = function (block, fmt) {
         var str = block.substr(i, j - i);
         var result = analysisLine(str);
         var resLine = generateFormatLine(result, fmt);
-        console.log("the [{0}] is : \n {1}".format(i, resLine));
+        // console.log("the [{0}] is : \n {1}".format(i, resLine));
         output += resLine + "\n";
         i = j + 1;
     }

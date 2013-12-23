@@ -13,7 +13,7 @@ io.sockets.on("connection", function(socket) {
         console.log("startformat called!");
         // console.log(data);
         var toCode = generateFormatBlock(data.code);
-        console.log(toCode);
+        // console.log(toCode);
         socket.emit("formatCompleted", { outputCode: toCode});
     });
 });

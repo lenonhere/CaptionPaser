@@ -6,17 +6,23 @@ String.prototype.format = function() {
         });
 };
 
+var addZero = function (str,length){               
+    return new Array(length - str.length + 1).join("0") + str;              
+}
+
 var analysisLine = function(strLine) {
-    var pattern = /\s*(-{2,})?\s*\(\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(.*)\s*,\s*(.*)\s*\),\s*/i;
+    // var pattern = /\s*(-{2,})?\s*\(\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(\d*)\s*,\s*(.*)\s*,\s*(.*)\s*,\s*(.*)\s*\),\s*/i;
+    var pattern = /\s*(-{2,})?\s*\(\s*(\'.*\')\s*,\s*(\d*)\s*,\s*(\'.*\')\s*,\s*(\'.*\')\s*,\s*(\d*)\s*,\s*(\'.*\')\s*,\s*(\d*)\s*,\s*(\'.*\')\s*,\s*(\'.*\')\s*,\s*(.*)\s*\),\s*/i;
     var res = pattern.exec(strLine);
     return res;
 };
 
-var generateFormatLine = function(element, fmt) {
+var generateFormatLine = function(element, fmt, rowNum) {
     // for (var i = 1; i <= 11; i++) {
     //     console.log("the [{0}] is : {1}".format(i, element[i]));
     // };
     if(element[1] == undefined) element[1] = "";
+    if(rowNum != undefined) element[11] = rowNum;
     return fmt.format(element[1], element[2], element[3],  
         element[4], element[5], element[6],  
         element[7], element[8], element[9],  
@@ -24,11 +30,14 @@ var generateFormatLine = function(element, fmt) {
 };
 
 var generateFormatBlock = function (block, fmt) {
+    var len = 2;
     var output = "";
     var i = 0;
+    var rowNum = 0;
+    var tmp = "";
     // console.log(block);
     if (fmt == undefined) {
-        fmt = "{0}( {1},\t\t\t{2},\t\t{3},\t\t\t{4},\t{5},\t{6},\t{7},\t{8},\t{9},\t{10}),";
+        fmt = "{0}( {1},\t\t\t\t{2},\t\t{3},\t\t\t{4},\t\t{5},\t{6},\t{7},\t{8},\t{9},\t{10}),";
     };
     while (i < block.length)
     {
@@ -36,9 +45,15 @@ var generateFormatBlock = function (block, fmt) {
         if (j == -1) j = block.length;
         var str = block.substr(i, j - i);
         var result = analysisLine(str);
-        var resLine = generateFormatLine(result, fmt);
+        if (result == undefined) return "format error";
+
+        tmp = "'" + addZero(rowNum.toString(), len) + "'";
+
+        var resLine = generateFormatLine(result, fmt, tmp);
         // console.log("the [{0}] is : \n {1}".format(i, resLine));
         output += resLine + "\n";
+
+        rowNum += 2;
         i = j + 1;
     }
     return output;
